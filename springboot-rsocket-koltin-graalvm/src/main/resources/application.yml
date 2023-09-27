@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: demo
+  profiles:
+    active: prod
+  rsocket:
+    server:
+      transport: websocket
+      port: 7001
+      mapping-path: /demo
