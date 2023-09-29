@@ -40,5 +40,4 @@ async function createClient(_options: ServerOptions) {
     const client = new RSocketConnector({ setup: setupOptions, transport })
     return await client.connect()
 }
-
 export {createClient, }
