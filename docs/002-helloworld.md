@@ -1,6 +1,6 @@
 # 1 简介
 
-示例项目`springboot-rsocket-koltin-graalvm`
+示例项目`springboot-rsocket-kotlin-graalvm`
 
 - 学习如何使用gradle构建项目
 

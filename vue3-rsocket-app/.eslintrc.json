@@ -1,0 +1,67 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2022": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:vue/vue3-recommended"
+  ],
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "parser": {
+      "ts": "@typescript-eslint/parser",
+      "vue": "vue-eslint-parser",
+      "template": "vue-eslint-parser"
+    }
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "vue"
+  ],
+  "globals": {
+    "defineOptions": "readonly",
+    "defineProps": "readonly",
+    "defineEmits": "readonly",
+    "defineExpose": "readonly",
+    "withDefaults": "readonly"
+  },
+  "rules": {
+    "vue/no-mutating-props": "off",
+    "vue/multi-word-component-names": "off",
+    "vue/component-name-in-template-casing": [
+      "error",
+      "PascalCase"
+    ],
+    "vue/no-v-html": "off",
+    "vue/first-attribute-linebreak": "off",
+    "vue/html-quotes": [
+      "error",
+      "double"
+    ],
+    "vue/html-indent": "off",
+    "vue/singleline-html-element-content-newline": "off",
+    "vue/max-attributes-per-line": "off",
+    "vue/html-self-closing": "off",
+    "vue/valid-template-root": "off",
+    "vue/mustache-interpolation-spacing": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "semi": [
+      "error",
+      "never",
+      {
+        "beforeStatementContinuationChars": "never"
+      }
+    ]
+  }
+}
