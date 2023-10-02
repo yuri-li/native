@@ -19,7 +19,7 @@
 brew install making/tap/rsc
 
 # 2 发送rsocket请求
-rsc --request --route=anonymous.greet ws://localhost:7001/demo
+rsc --request --debug --route=anonymous.greet ws://localhost:7001/demo
 ```
 
 ![](assets/2023-09-28-03-04-05-image.png)

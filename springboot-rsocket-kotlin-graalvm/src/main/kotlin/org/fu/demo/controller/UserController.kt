@@ -13,32 +13,27 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Controller
-class HelloController {
+class UserController {
     private val log = LoggerFactory.getLogger(this::class.java)
 
-    @MessageMapping("anonymous.greet")
-    suspend fun greet(): User {
+    @MessageMapping("anonymous.user.profile")
+    suspend fun profile(): User {
         val model = User(
             id = UUID.randomUUID().toString(),
             age = 18,
             gender = Gender.Male,
             time = LocalDateTime.now().toKotlinLocalDateTime()
         )
-        log.info("创建新用户 {}", model)
+        log.info("查看用户资料 {}", model)
         delay(5000)
         return model
     }
 
-    @MessageMapping("user.list")
-    suspend fun users(): Flow<User> = flow<User>{
-        repeat(3) {
+    @MessageMapping("anonymous.user.ids")
+    suspend fun ids(): Flow<Int> = flow{
+        repeat(5) {
             delay(1000)
-            emit(User(
-                id = UUID.randomUUID().toString(),
-                age = (18..25).random(),
-                gender = Gender.entries.toTypedArray().random(),
-                time = LocalDateTime.now().toKotlinLocalDateTime()
-            ))
+            emit(it)
         }
     }
 }

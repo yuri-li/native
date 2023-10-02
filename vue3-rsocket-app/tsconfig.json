@@ -25,7 +25,10 @@
     "paths": {
       "@/*": ["src/*"],
       "~/*": ["test/*"]
-    }
+    },
+    "types": ["@modyfi/vite-plugin-yaml/modules"]
   },
-  "include": ["vite.config.ts", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+  "include": ["vite.config.ts",
+    "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue",
+    "test/**/*.ts","test/**/*.d.ts"]
 }

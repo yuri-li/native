@@ -1,0 +1,6 @@
+server:
+  rsocket:
+    protocol: ws
+    host: localhost
+    port: 7001
+    mappingPath: demo

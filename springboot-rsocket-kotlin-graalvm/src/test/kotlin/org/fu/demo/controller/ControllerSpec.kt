@@ -2,31 +2,33 @@ package org.fu.demo.controller
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.rsocket.frame.FrameUtil
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.reactive.awaitFirst
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import kotlinx.coroutines.reactive.awaitSingle
 import org.fu.demo.model.User
 import org.slf4j.LoggerFactory
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.messaging.rsocket.RSocketRequester
 import org.springframework.messaging.rsocket.retrieveFlow
 import org.springframework.messaging.rsocket.retrieveMono
+import org.springframework.util.MimeType
 
 
 @SpringBootTest
 class ControllerSpec(val requester: RSocketRequester) : StringSpec({
-    "hello" {
+    "request-response" {
         requester
-            .route("anonymous.greet")
+            .route("anonymous.user.profile")
             .retrieveMono<User>()
-            .awaitFirst().age.shouldBe(18)
+            .awaitSingle().age.shouldBe(18)
+//            .awaitFirst().age.shouldBe(18)
     }
-    "user list" {
-        requester.route("user.list")
-            .retrieveFlow<User>()
-            .onEach { log.info("loaded from server: {}", Json.encodeToString(it)) }
-            .toList().size.shouldBe(3)
+    "request-stream" {
+        requester.route("anonymous.user.ids")
+            .retrieveFlow<Int>()
+            .onEach { log.info("loaded from server: {}", it) }
+            .toList().size.shouldBe(5)
     }
 }) {
     companion object {

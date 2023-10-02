@@ -4,8 +4,8 @@
 **/out/
 **/.kotlintest/
 **/logs/
-**/gradle.properties
 **/*.log
+### **/gradle.properties
 
 ### STS ###
 **/.apt_generated
@@ -19,7 +19,7 @@
 ### IntelliJ IDEA ###
 **/.idea/
 **/*.iws
-**/*.iml
+### **/*.iml
 **/*.ipr
 
 ### NetBeans ###

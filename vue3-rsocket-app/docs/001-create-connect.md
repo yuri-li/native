@@ -94,7 +94,7 @@ async function createClient(_options: ServerOptions) {
         wsCreator: (url) => new WebSocket(url)
     })
     const client = new RSocketConnector({ setup: setupOptions, transport })
-    return await client.connect()
+    return await client.connector()
 }
 
 export {createClient, }
