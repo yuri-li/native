@@ -3,6 +3,7 @@
     <span class="nav-link"><router-link to="/counter">counter</router-link></span>
     <span class="nav-link"><router-link to="/user/profile">user profile</router-link></span>
     <span class="nav-link"><router-link to="/user/ids">user ids</router-link></span>
+    <span class="nav-link"><router-link to="/cash/transfer">转账</router-link></span>
   </div>
   <router-view v-slot="{ Component }">
     <Suspense>

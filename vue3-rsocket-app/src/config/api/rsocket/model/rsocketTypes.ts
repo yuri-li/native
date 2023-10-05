@@ -22,7 +22,16 @@ function requestResponseEvent<R>(resolve: (value: (PromiseLike<R> | R)) => void,
         },
     }
 }
-
+function fireAndForgetEvent(resolve: (value: (PromiseLike<null> | null)) => void, reject: (reason?: any) => void){
+    return {
+        onError(error: Error): void {
+            reject(error)
+        },
+        onComplete(): void {
+            resolve(null)
+        },
+    }
+}
 export interface OnCompleteSubscriber {
     onComplete(): void;
 }
@@ -31,5 +40,6 @@ export type StreamResponse = Requestable & Cancellable & OnExtensionSubscriber
 export type StreamResponseEvent = OnCompleteSubscriber & OnNextSubscriber
 
 export {
-    requestResponseEvent
+    requestResponseEvent,
+    fireAndForgetEvent,
 }

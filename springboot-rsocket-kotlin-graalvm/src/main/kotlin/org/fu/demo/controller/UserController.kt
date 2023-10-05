@@ -4,7 +4,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.datetime.toKotlinLocalDateTime
+import org.fu.demo.config.BusinessException
 import org.fu.demo.model.Gender
+import org.fu.demo.model.TransferDto
 import org.fu.demo.model.User
 import org.slf4j.LoggerFactory
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -30,10 +32,18 @@ class UserController {
     }
 
     @MessageMapping("anonymous.user.ids")
-    suspend fun ids(): Flow<Int> = flow{
+    suspend fun ids(): Flow<Int> = flow {
         repeat(5) {
             delay(1000)
             emit(it)
         }
+    }
+
+    @MessageMapping("anonymous.cash.transfer")
+    suspend fun transfer(dto: TransferDto) {
+        if (dto.amount > 20) {
+            throw BusinessException("账户余额不足")
+        }
+        log.info("${dto.from}给${dto.to}转账${dto.amount}元")
     }
 }

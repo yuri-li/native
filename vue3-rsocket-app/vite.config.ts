@@ -11,8 +11,8 @@ export default defineConfig({
     plugins: [Vue(), ViteYAML()],
     build: {
         target: "esnext",
-        // minify: false,
-        // sourcemap: true,
+        minify: false,
+        sourcemap: true,
     },
     resolve: {
         alias: {
