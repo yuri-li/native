@@ -1,18 +1,12 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 pluginManagement {
-    val kotlinVersion: String by settings
-    val springbootVersion: String by settings
-    val foojayVersion:String by settings
     repositories {
         mavenLocal()
         gradlePluginPortal()
         mavenCentral()
     }
-    plugins {
-        kotlin("jvm") version kotlinVersion
-        id("org.springframework.boot") version springbootVersion
-        kotlin("plugin.spring") version kotlinVersion
-        kotlin("plugin.serialization") version kotlinVersion
-        id("org.gradle.toolchains.foojay-resolver-convention") version foojayVersion
+    plugins{
+        id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
     }
 }
 rootProject.name = "springboot-rsocket-kotlin-graalvm"

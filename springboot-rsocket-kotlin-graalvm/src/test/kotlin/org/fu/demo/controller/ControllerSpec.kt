@@ -4,8 +4,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.rsocket.exceptions.CustomRSocketException
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.fu.demo.config.Reason
@@ -15,8 +15,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.messaging.rsocket.RSocketRequester
 import org.springframework.messaging.rsocket.retrieveFlow
+import org.springframework.messaging.rsocket.retrieveFlux
 import org.springframework.messaging.rsocket.retrieveMono
-import org.springframework.util.MimeType
+import reactor.test.StepVerifier
 
 
 @SpringBootTest
@@ -34,21 +35,31 @@ class ControllerSpec(val requester: RSocketRequester) : StringSpec({
             .onEach { log.info("loaded from server: {}", it) }
             .toList().size.shouldBe(5)
     }
-    "fire and forget"{
+    "request-stream & 背压" {
+        StepVerifier.create(requester.route("anonymous.user.ids").retrieveFlux<Int>())
+            .thenRequest(2)
+            .expectNext(0, 1)
+            .thenRequest(3)
+            .expectNext(2, 3, 4)
+            .expectComplete()
+            .verify()
+    }
+    "fire and forget" {
         requester.route("anonymous.cash.transfer")
             .data(TransferDto(amount = 15))
             .send()
             .awaitSingleOrNull()
     }
-    "exception handler"{
+    "exception handler" {
+        val amount = 25
         val exception = shouldThrow<CustomRSocketException> {
             requester.route("anonymous.cash.transfer")
                 .data(TransferDto(amount = 25))
                 .retrieveMono<Void>()
                 .awaitSingleOrNull()
         }
-        exception.errorCode().shouldBe(Reason.BusinessException.errorCode)
-        exception.message.shouldBe("""{"reason":"BusinessException","message":"账户余额不足"}""")
+        exception.errorCode().shouldBe(Reason.ValidationException.errorCode)
+        exception.message.shouldBe("""{"reason":"ValidationException","fieldName":"transfer.dto.amount","message":"转账金额 $amount > 20，账户余额不足"}""")
     }
 }) {
     companion object {

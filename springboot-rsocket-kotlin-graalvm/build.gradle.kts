@@ -1,20 +1,20 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+@file:Suppress("VulnerableLibrariesLocal")
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     idea
-    id("org.springframework.boot")
-    id("io.spring.dependency-management") version "1.1.3"
-
-    kotlin("jvm")
-    kotlin("plugin.spring")
-    kotlin("plugin.serialization")
-
-    id("org.graalvm.buildtools.native") version "0.9.27"
     id("java")
+
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.kotlin.serialization)
+
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.tools.graalvm)
 }
 group = "org.fu.demo"
-version = "0.0.3"
+version = "0.0.4"
 
 idea {
     module {
@@ -23,42 +23,32 @@ idea {
     }
 }
 
-java{
-    sourceCompatibility = JavaVersion.VERSION_19
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(19))
+    }
+    sourceCompatibility = JavaVersion.toVersion(19)
 }
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    val kotlinxJackson: String by project
-    val logback: String by project
-    val kotest: String by project
-    val kotlinSerialization: String by project
-    val datetimeVersion: String by project
-    val kotestSpringVersion: String by project
-
-    implementation("org.springframework.boot:spring-boot-starter-rsocket") {
+    implementation(libs.spring.rsocket) {
         exclude(group = "com.fasterxml.jackson")
         exclude(group = "com.fasterxml.jackson.core")
         exclude(group = "com.fasterxml.jackson.datatype")
         exclude(group = "com.fasterxml.jackson.module")
+        exclude(group = "com.fasterxml.jackson.dataformat")
     }
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerialization")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime-jvm:$datetimeVersion")
-    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation(libs.bundles.validator)
+    implementation(libs.bundles.kotlin.reactor)
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+    testImplementation(libs.spring.boot.starter.test){
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
         exclude(module = "mockito-core")
     }
-    testImplementation("io.projectreactor:reactor-test")
-    testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotest")
-    testImplementation("io.kotest:kotest-assertions-core-jvm:$kotest")
-    testImplementation("io.kotest:kotest-property:$kotest")
-    testImplementation("io.kotest.extensions:kotest-extensions-spring:$kotestSpringVersion")
+    testImplementation(libs.bundles.kotest)
 }
 
 tasks {
@@ -75,7 +65,7 @@ tasks {
         useJUnitPlatform()
     }
     withType<Wrapper> {
-        distributionType = Wrapper.DistributionType.BIN
+        distributionType = Wrapper.DistributionType.ALL
         gradleVersion = "8.3"
     }
 }

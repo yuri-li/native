@@ -1,33 +1,14 @@
 package org.fu.demo.config
 
 import io.rsocket.exceptions.CustomRSocketException
+import jakarta.validation.ConstraintViolationException
 import org.slf4j.LoggerFactory
-import org.springframework.context.ApplicationContext
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import org.springframework.messaging.handler.MessagingAdviceBean
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler
-import org.springframework.messaging.rsocket.RSocketStrategies
-import org.springframework.messaging.rsocket.annotation.support.RSocketMessageHandler
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.method.ControllerAdviceBean
 
-@Configuration
-class RSocketConfiguration {
-    @Bean
-    fun messageHandler(
-        context: ApplicationContext,
-        rSocketStrategies: RSocketStrategies,
-    ): RSocketMessageHandler {
-        val messageHandler = RSocketMessageHandler()
-        messageHandler.setRSocketStrategies(rSocketStrategies)
-        ControllerAdviceBean.findAnnotatedBeans(context).forEach{controllerAdviceBean ->
-            messageHandler.registerMessagingAdvice(ControllerAdviceWrapper(controllerAdviceBean))
-        }
 
-        return messageHandler
-    }
-}
 class ControllerAdviceWrapper(val bean: ControllerAdviceBean) : MessagingAdviceBean {
     override fun getOrder(): Int {
         return bean.order
@@ -48,14 +29,14 @@ class ControllerAdviceWrapper(val bean: ControllerAdviceBean) : MessagingAdviceB
 
 @ControllerAdvice
 class GlobalExceptionHandler {
-    /*@Throws(CustomRSocketException::class)
+    @Throws(CustomRSocketException::class)
     @MessageExceptionHandler(ConstraintViolationException::class)
     fun handlerConstraintViolationException(ex: ConstraintViolationException) {
         val model = ex.constraintViolations.first()
         val temp = ValidationException(fieldName = model.propertyPath.toString(), message = model.message!!)
         log.error(temp.toString())
         throw temp.toRSocket()
-    }*/
+    }
 
     @Throws(CustomRSocketException::class)
     @MessageExceptionHandler(BusinessException::class)

@@ -1,19 +1,21 @@
 package org.fu.demo.controller
 
+import jakarta.validation.Valid
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.datetime.toKotlinLocalDateTime
-import org.fu.demo.config.BusinessException
 import org.fu.demo.model.Gender
 import org.fu.demo.model.TransferDto
 import org.fu.demo.model.User
 import org.slf4j.LoggerFactory
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.stereotype.Controller
+import org.springframework.validation.annotation.Validated
 import java.time.LocalDateTime
 import java.util.*
 
+@Validated
 @Controller
 class UserController {
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -40,10 +42,7 @@ class UserController {
     }
 
     @MessageMapping("anonymous.cash.transfer")
-    suspend fun transfer(dto: TransferDto) {
-        if (dto.amount > 20) {
-            throw BusinessException("账户余额不足")
-        }
+    suspend fun transfer(@Valid dto: TransferDto) {
         log.info("${dto.from}给${dto.to}转账${dto.amount}元")
     }
 }
