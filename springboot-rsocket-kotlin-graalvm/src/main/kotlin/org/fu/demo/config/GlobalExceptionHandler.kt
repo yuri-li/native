@@ -56,7 +56,7 @@ class GlobalExceptionHandler {
     @MessageExceptionHandler
     fun handlerUnknownException(ex: Throwable) {
         val temp = UnknownException(cause = ex)
-        log.error(temp.toString())
+        log.error(ex.stackTraceToString())
         throw temp.toRSocket()
     }
 

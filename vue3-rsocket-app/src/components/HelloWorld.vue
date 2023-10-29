@@ -1,9 +1,12 @@
 <template>
   <div style="width:500px;padding-left:200px;display: flex; flex-wrap: wrap; align-content: space-between; background-color: aliceblue;">
-    <span class="nav-link"><router-link to="/counter">counter</router-link></span>
+<!--    <span class="nav-link"><router-link to="/counter">counter</router-link></span>
     <span class="nav-link"><router-link to="/user/profile">user profile</router-link></span>
     <span class="nav-link"><router-link to="/user/ids">user ids</router-link></span>
-    <span class="nav-link"><router-link to="/cash/transfer">转账</router-link></span>
+    <span class="nav-link"><router-link to="/cash/transfer">转账</router-link></span>-->
+    <span class="nav-link"><router-link to="/crud/create">新增</router-link></span>
+    <span class="nav-link"><router-link to="/crud/read">查询</router-link></span>
+
   </div>
   <router-view v-slot="{ Component }">
     <Suspense>

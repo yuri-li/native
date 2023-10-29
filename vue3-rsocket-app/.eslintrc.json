@@ -42,7 +42,7 @@
         "tsx": "never",
         "mjs": "never"
       }
-    ]
+    ],
     "vue/no-mutating-props": "off",
     "vue/multi-word-component-names": "off",
     "vue/component-name-in-template-casing": [

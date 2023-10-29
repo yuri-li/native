@@ -4,13 +4,18 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.rsocket.exceptions.CustomRSocketException
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.fu.demo.config.Reason
 import org.fu.demo.model.TransferDto
 import org.fu.demo.model.User
+import org.fu.demo.service.UserService
 import org.slf4j.LoggerFactory
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.messaging.rsocket.RSocketRequester
@@ -18,6 +23,7 @@ import org.springframework.messaging.rsocket.retrieveFlow
 import org.springframework.messaging.rsocket.retrieveFlux
 import org.springframework.messaging.rsocket.retrieveMono
 import reactor.test.StepVerifier
+import java.time.Duration
 
 
 @SpringBootTest
@@ -43,6 +49,19 @@ class ControllerSpec(val requester: RSocketRequester) : StringSpec({
             .expectNext(2, 3, 4)
             .expectComplete()
             .verify()
+    }
+    "komapper"{
+        requester.route("anonymous.user.initDB")
+            .send()
+            .awaitSingleOrNull()
+
+        requester.route("anonymous.user.add")
+            .send()
+            .awaitSingleOrNull()
+
+        requester.route("anonymous.user.findAll")
+            .retrieveFlow<User>()
+            .toList().size.shouldBe(4)
     }
     "fire and forget" {
         requester.route("anonymous.cash.transfer")

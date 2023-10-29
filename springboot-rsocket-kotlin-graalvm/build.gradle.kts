@@ -12,6 +12,7 @@ plugins {
 
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.tools.graalvm)
+    alias(libs.plugins.ksp)
 }
 group = "org.fu.demo"
 version = "0.0.4"
@@ -20,6 +21,9 @@ idea {
     module {
         isDownloadJavadoc = false
         isDownloadSources = true
+        // Not using += due to https://github.com/gradle/gradle/issues/8749
+        sourceDirs = sourceDirs + file("build/generated/ksp/main/kotlin") // or tasks["kspKotlin"].destination
+        generatedSourceDirs = generatedSourceDirs + file("build/generated/ksp/main/kotlin") + file("build/generated/ksp/test/kotlin")
     }
 }
 
@@ -43,6 +47,10 @@ dependencies {
     }
     implementation(libs.bundles.validator)
     implementation(libs.bundles.kotlin.reactor)
+
+    ksp(libs.komapper.processor)
+    implementation(libs.komapper.spring.boot.starter.r2dbc)
+    runtimeOnly(libs.komapper.dialect.h2.r2dbc)
 
     testImplementation(libs.spring.boot.starter.test){
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")

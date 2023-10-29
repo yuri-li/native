@@ -3,8 +3,17 @@ spring:
     name: demo
   profiles:
     active: prod
+  r2dbc:
+    url: r2dbc:h2:mem:///example;DB_CLOSE_DELAY=-1
   rsocket:
     server:
       transport: websocket
       port: 7001
       mapping-path: /demo
+
+
+logging:
+  level:
+    org:
+      komapper:
+        Sql: DEBUG

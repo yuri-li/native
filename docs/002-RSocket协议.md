@@ -63,3 +63,7 @@ RSocket协议的应用场景很全面，团队可以甩掉很重的技术包袱�
 ## 3.2 为什么不使用Dubbo
 
 没有必要。如非必要，勿增实体
+
+# 4 参考资料
+
+https://www.canva.dev/blog/engineering/enabling-real-time-collaboration-with-rsocket/
